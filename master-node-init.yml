@@ -1,0 +1,69 @@
+- hosts: masters
+  become: yes
+  tasks:
+    - name: Initialize the Kubernetes cluster using kubeadm
+      command: kubeadm init --apiserver-advertise-address="192.168.56.10" --apiserver-cert-extra-sans="192.168.56.10" --pod-network-cidr=10.10.42.0/16
+
+    - name: Setup kubeconfig for vagrant user
+      command: "{{ item }}"
+      with_items:
+      - mkdir -p /home/vagrant/.kube
+      - cp -i /etc/kubernetes/admin.conf /home/vagrant/.kube/config
+      - chown vagrant:vagrant /home/vagrant/.kube/config
+
+    - name: Copy admin.conf to user's kube config
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/vagrant/.kube/config
+        remote_src: yes
+        owner: vagrant
+
+    - name: Install Pod network (Calico)
+      become_user: vagrant
+      shell: kubectl apply -f https://docs.projectcalico.org/v3.18/manifests/calico.yaml 
+      args:
+        chdir: $HOME
+        
+    - name: Generate join command
+      command: kubeadm token create --print-join-command
+      register: join_command
+
+    - name: Copy join command to local file
+      become: false
+      local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./join-command"
+
+    - name: Install packages
+      apt: name={{item}} state=latest
+      with_items:
+        - unzip
+        - curl
+
+    - name: Install terraform
+      unarchive:
+        src: https://releases.hashicorp.com/terraform/1.0.0/terraform_1.0.0_linux_amd64.zip
+        dest: /usr/bin
+        remote_src: True
+
+    - name: Install tfsec
+      command: curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+
+    - name: Install Helm
+      shell: |
+              curl -s https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+              sudo apt-get install apt-transport-https --yes
+              echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+              sudo apt-get update
+              sudo apt-get install helm
+
+    - name: Install helmfile
+      unarchive:
+        src: https://github.com/helmfile/helmfile/releases/download/v0.149.0/helmfile_0.149.0_linux_amd64.tar.gz
+        dest: /usr/bin
+        remote_src: True              
+
+    - name: Create charts
+      command: "{{ item }}"
+      with_items:
+      - mkdir charts && cd charts
+      - helm create microservice
+      - helm create redis
