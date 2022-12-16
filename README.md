@@ -12,7 +12,7 @@ Local ubuntu machine with installed:
 - `mkdir -p ~/vagrant/kubernetes`
 
 2. Create key-pair (named vagrant_key)
-- ssh-keygen -b 4096
+- `ssh-keygen -b 4096`
 
 3. Create following files inside above directory
 - Vagrantfile
