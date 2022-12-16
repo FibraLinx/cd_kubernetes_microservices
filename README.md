@@ -65,4 +65,10 @@ Local ubuntu machine with installed:
 3. Run the helmfile
 - `helmfile sync`
 
+4. Check microservice homepage is reachable
+- `kubectl get svc`
+- `frontend                NodePort    <IP_ADDRESS>    <none>        80:32424/TCP`
+- browse to <IP_ADDRESS>:80
+- `curl <IP_ADDRESS>:80`
+
 ## Setup CD with GitHub actions
