@@ -63,7 +63,7 @@ Local ubuntu machine with installed:
 - helmfile.yaml
 
 3. Run the helmfile
-- `helmfile sync`
+- `helmfile apply`
 
 4. Check microservice homepage is reachable
 - `kubectl get svc`
