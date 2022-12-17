@@ -1,4 +1,4 @@
-# Procedure to automatically deploy a microservices kubernetes cluster in a vagrant infrastructure using terraform, helmfile, github actions
+# Procedure to automatically deploy a microservices kubernetes cluster in a vagrant infrastructure using terraform, helmfile, jenkins
 
 ## Prerequisites
 Local ubuntu machine with installed:
@@ -70,4 +70,4 @@ Local ubuntu machine with installed:
 - `frontend                NodePort    <IP_ADDRESS>    <none>        80:32424/TCP`
 - from physical host browse to <YOUR_WORKER_IP_ADDRESS>:32424
 
-## Setup CD with GitHub actions
+## Setup CD with Jenkins
