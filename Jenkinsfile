@@ -3,9 +3,12 @@ pipeline {
 	stages {
 		stage("deploy") {
 			steps {
-				script {
-					sh 'helmfile sync'
-				}
+              			sshagent(['kubernetes']) {
+                    			sh '''
+                    			ssh -o StrictHostKeyChecking=no vagrant@192.168.56.10
+                    			helmfile sync
+                    			'''
+                		}
 			}
 		}
 	}
