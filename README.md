@@ -68,7 +68,6 @@ Local ubuntu machine with installed:
 4. Check microservice homepage is reachable
 - `kubectl get svc`
 - `frontend                NodePort    <IP_ADDRESS>    <none>        80:32424/TCP`
-- browse to <IP_ADDRESS>:80
-- `curl <IP_ADDRESS>:80`
+- from physical host browse to <YOUR_WORKER_IP_ADDRESS>:32424
 
 ## Setup CD with GitHub actions
