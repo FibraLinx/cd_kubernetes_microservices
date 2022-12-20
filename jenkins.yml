@@ -1,3 +1,62 @@
+- name: Install pip, docker
+  hosts: jenkins
+  become: yes
+  gather_facts: False
+  tasks:
+
+    - name: Install packages that allow apt to be used over HTTPS and pip
+      apt:
+        name: "{{ packages }}"
+        state: present
+        update_cache: yes
+      vars:
+        packages:
+        - ca-certificates
+        - curl
+        - gnupg
+        - lsb-release
+        - pip
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    - name: Start docker daemon
+      systemd:
+        name: docker
+        state: started
+
+    - name: Install docker python module
+      pip:
+        name:
+          - docker
+
+- name: Add vagrant to docker group
+  hosts: jenkins
+  become: yes
+  tasks:
+
+    - name: Add vagrant to docker group
+      user:
+        name: vagrant
+        groups: docker
+        append: yes
+
+    - name: Reconnect to server session
+      meta: reset_connection
+
 - name: Run jenkins container
   hosts: jenkins
   tasks:
