@@ -20,6 +20,7 @@ Local ubuntu machine with installed:
 - node-init.yml
 - master-node-init.yml
 - worker-node-init.yml
+- jenkins.yml
 
 4. Run VMs
 - `vagrant up`
@@ -31,6 +32,7 @@ Local ubuntu machine with installed:
 - `ansible-playbook -i hosts node-init.yml`
 - `ansible-playbook -i hosts master-node-init.yml`
 - `ansible-playbook -i hosts worker-node-init.yml`
+- `ansible-playbook -i hosts jenkins.yml`
 
 ## Setup terraform on master node
 
@@ -71,3 +73,12 @@ Local ubuntu machine with installed:
 - from physical host browse to <YOUR_WORKER_IP_ADDRESS>:32424
 
 ## Setup CD with Jenkins
+1. Browse to jenkins (with my current IP setup 192.168.56.13:8080) and complete setup
+2. Create a new pipeline and connect your git repository
+3. Install SSH plugin
+4. Create a new SSH key pair in Jenkins server `ssh-keygen`
+5. From Jenkins UI create new credentials of type "SSH Username with private key":
+   - call it "k8s"
+   - paste private key created in previous step
+6. Paste the public key from above created key-pair to host k8s-master in ~./ssh/authorized_keys
+7. Run the pipeline
