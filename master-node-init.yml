@@ -36,7 +36,6 @@
       apt: name={{item}} state=latest
       with_items:
         - unzip
-        - curl
 
     - name: Install terraform
       unarchive:
@@ -60,6 +59,9 @@
         src: https://github.com/helmfile/helmfile/releases/download/v0.149.0/helmfile_0.149.0_linux_amd64.tar.gz
         dest: /usr/bin
         remote_src: True              
+
+    - name : Install helmfile diff
+      command: helm plugin install https://github.com/databus23/helm-diff | bash         
 
     - name: Create charts
       command: "{{ item }}"
