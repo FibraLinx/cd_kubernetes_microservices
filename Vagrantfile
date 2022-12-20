@@ -29,4 +29,15 @@ Vagrant.configure(2) do |config|
             end
         end
     end
+
+    # Configure jenkins 
+    config.vm.define "jenkins" do |jenkins|
+        jenkins.vm.box = IMAGE_NAME
+        jenkins.vm.network "private_network", ip: "192.168.56.13"
+        jenkins.vm.hostname = "jenkins"
+        jenkins.vm.provider "virtualbox" do |v|
+            v.memory = 2048
+            v.cpus = 1
+        end
+    end
 end
