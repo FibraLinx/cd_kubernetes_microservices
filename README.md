@@ -78,7 +78,7 @@ Local ubuntu machine with installed:
 3. Install SSH plugin
 4. Create a new SSH key pair in Jenkins server `ssh-keygen`
 5. From Jenkins UI create new credentials of type "SSH Username with private key":
-   - call it "k8s"
+   - name "k8s"
    - paste private key created in previous step
 6. Paste the public key from above created key-pair to host k8s-master in ~./ssh/authorized_keys
 7. Run the pipeline
