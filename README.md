@@ -20,7 +20,7 @@ Local ubuntu machine with installed:
 - node-init.yml
 - master-node-init.yml
 - worker-node-init.yml
-- jenkins.yml
+- jenkins-init.yml
 
 4. Run VMs
 - `vagrant up`
