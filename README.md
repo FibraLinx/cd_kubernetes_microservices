@@ -32,7 +32,7 @@ Local ubuntu machine with installed:
 - `ansible-playbook -i hosts node-init.yml`
 - `ansible-playbook -i hosts master-node-init.yml`
 - `ansible-playbook -i hosts worker-node-init.yml`
-- `ansible-playbook -i hosts jenkins.yml`
+- `ansible-playbook -i hosts jenkins-init.yml`
 
 ## Setup terraform on master node
 
